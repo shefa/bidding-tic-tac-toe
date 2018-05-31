@@ -25,11 +25,11 @@
   <h2 class="ui inverted header">Players: {{players.length}}</h2>
   {{#if waiting}}
     {{#if mymove}}
-    <div class="ui message">
+    <div class="ui inverted success message">
         <p>Make a move!</p>
     </div>
     {{else}}
-    <div class="ui message">
+    <div class="ui inverted message">
          <p>Waiting for player to make move...</p>
     </div>
     {{/if}}
@@ -44,9 +44,9 @@
     </div>
     <table class="ui inverted celled table">
       <tbody>
-        <tr><td id="0"></td><td id="1"></td><td id="2"></td></tr>
-        <tr><td id="3"></td><td id="4"></td><td id="5"></td></tr>
-        <tr><td id="6"></td><td id="7"></td><td id="8"></td></tr>
+        <tr><td id="0">{{{doTable 0}}}</td><td id="1">{{{doTable 1}}}</td><td id="2">{{{doTable 2}}}</td></tr>
+        <tr><td id="3">{{{doTable 3}}}</td><td id="4">{{{doTable 4}}}</td><td id="5">{{{doTable 5}}}</td></tr>
+        <tr><td id="6">{{{doTable 6}}}</td><td id="7">{{{doTable 7}}}</td><td id="8">{{{doTable 8}}}</td></tr>
       </tbody>
     </table>
     <div class="ui relaxed grid container">

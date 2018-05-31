@@ -5,19 +5,20 @@ Meteor.decodeState = function (room)
 {
     return {
         "ma3x": [
-            [room&(1<<0),room&(1<<1),room&(1<<2)],
-            [room&(1<<3),room&(1<<4),room&(1<<5)],
-            [room&(1<<6),room&(1<<7),room&(1<<8)]
+            [(room&(1<<0))>>0,(room&(1<<1))>>1,(room&(1<<2))>>2],
+            [(room&(1<<3))>>3,(room&(1<<4))>>4,(room&(1<<5))>>5],
+            [(room&(1<<6))>>6,(room&(1<<7))>>7,(room&(1<<8))>>8]
             ],
         "placed": [
-            [room&(1<<10),room&(1<<11),room&(1<<12)],
-            [room&(1<<13),room&(1<<14),room&(1<<15)],
-            [room&(1<<16),room&(1<<17),room&(1<<18)]
+            [(room&(1<<10))>>10,(room&(1<<11))>>11,(room&(1<<12))>>12],
+            [(room&(1<<13))>>13,(room&(1<<14))>>14,(room&(1<<15))>>15],
+            [(room&(1<<16))>>16,(room&(1<<17))>>17,(room&(1<<18))>>18]
             ],
-        "tie": room&(1<<9),
+        "tie": (room&(1<<9))>>9,
         "moneyFirst": room>>19
     }
 }
+
 
 Meteor.encodeState = function (obj)
 {

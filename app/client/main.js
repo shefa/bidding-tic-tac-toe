@@ -25,6 +25,31 @@ Template.game.events({
       }
 
       else alert("Incorrect bid amount!");
+  },
+  'click td': function(e, template)
+  {
+      var t = e.target;
+      while(t.attributes['id']===undefined) t=t.parentElement;
+      var id = parseInt(t.attributes['id'].value);
+      
+      var room = Rooms.findOne(FlowRouter.getParam("_id"));
+      var s = Meteor.decodeState(room.state);
+      //console.log(id,parseInt(id/3),id%3);
+      if( !room.players.includes(Meteor.userId) ) return;
+      if(s.placed[parseInt(id/3)][id%3]) return;
+
+      var me=-1;
+      if(Meteor.userId===room.players[0]) me=0;
+      else me=1;
+      
+      if(me!=room.toMove) return;
+      s.placed[parseInt(id/3)][id%3]=1;
+      s.ma3x[parseInt(id/3)][id%3]=me;
+     
+      //var es = Meteor.encodeState(s);
+      //console.log(es);
+
+      Rooms.update(FlowRouter.getParam("_id"),{"$set":{"state":Meteor.encodeState(s),"toMove":-1}});
   }
 });
 
@@ -43,10 +68,13 @@ Template.game.helpers({
       if(this.bidFirst==this.bidSecond)
       {
         first = Template.instance().state.tie;
+        console.log("switching tie");
         if(Template.instance().state.tie===1) Template.instance().state.tie=0;
         else Template.instance().state.tie=1;
+        console.log(Template.instance().state.tie);
       }
-      else first = this.bidFirst>this.bidSecond;
+      else if (this.bidFirst>this.bidSecond) first=0;
+      else first=1;
 
       Template.instance().state.moneyFirst+=this.bidSecond-this.bidFirst;
 
@@ -54,29 +82,21 @@ Template.game.helpers({
       this.bidSecond=-1;
 
       this.toMove=first;
+      console.log(Template.instance().state.tie);
       this.state = Meteor.encodeState(Template.instance().state);
-
+      console.log(this.state);
       Rooms.update(FlowRouter.getParam("_id"),this);
     }
   },
-  after: function()
+  doTable: function(x)
   {
-    var s = Template.instance().state;
-    console.log(s);
-    var curr = 0;
-    for(var i=0;i<2;i++)
+    var s=Template.instance().state;
+    if(s.placed[parseInt(x/3)][x%3])
     {
-      for(var j=0;j<2;j++)
-      {
-        if(s.placed[i][j])
-        {
-          if(s.ma3x[i][j]==0) $("#"+curr).html(Meteor.tic_x);
-          else $("#"+curr).html(Meteor.tic_o);
-        }
-
-        curr++;
-      }
+        if(s.ma3x[parseInt(x/3)][x%3]==0) return Meteor.tic_x;
+        return Meteor.tic_o; 
     }
+    return "";
   },
   waiting: function()
   {
