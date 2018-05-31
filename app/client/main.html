@@ -59,10 +59,10 @@
     </table>
     <div class="ui relaxed grid container">
       <div class="eight wide column">
-        <h2 class="ui inverted header left aligned"> Player1 bet: {{{myBet}}} </h2>
+          <h2 class="ui inverted header left aligned">{{{myBet}}} </h2>
       </div>
       <div class="eight wide column">
-        <h2 class="ui inverted header right aligned"> Player2 bet: {{{enemyBet}}} </h2>
+        <h2 class="ui inverted header right aligned"> {{{enemyBet}}} </h2>
       </div>
     </div>
     <div id="betBtn" class="ui huge primary inverted button" style="margin-top: 1.5em;">Bet</div>
@@ -132,13 +132,13 @@
   <div class="ui text container left aligned stuff">
   {{#if rooms.count}}
     <div class="ui relaxed grid container">
-      <div class="ten wide column"><h2 class="ui dividing header inverted ">Name</h2></div>
+      <div class="ten wide column"><h2 class="ui dividing header inverted">Name</h2></div>
       <div class="six wide column"><h2 class="ui dividing header inverted">Players</h2></div>
       {{#each rooms}}
         <div class="ui inverted row left aligned item button" style="padding: 1em 3em !important;" id="{{_id}}">
           <div class="ten wide column">
             <div class="content">
-              <a class="header">{{name}}</a>
+                {{{locked}}}<a class="header">{{name}}</a>
             </div>
           </div>
           <div class="six wide column">

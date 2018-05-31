@@ -24,7 +24,7 @@ Template.game.events({
 	  
       var bet = parseInt(prompt("Bid amount(0-"+maxm+")",""));
 
-      if(bet>=0&&bet<=template.state.moneyFirst)
+      if(bet>=0&&bet<=maxm)
       {
         if(room.players[0]===Meteor.userId)
         Rooms.update(FlowRouter.getParam("_id"),{"$set":{"bidFirst":bet}});
@@ -84,6 +84,7 @@ Template.game.helpers({
       Template.instance().state.moneyFirst+=this.bidSecond-this.bidFirst;
 
 	  this.lastBidFirst=this.bidFirst;
+      this.lastBidSecond=this.bidSecond;
 	  
       this.bidFirst=-1;
       this.bidSecond=-1;
@@ -143,28 +144,38 @@ Template.game.helpers({
   enemyMoney: function()
   {
 	if(!this.players.includes(Meteor.userId)) return "Player 2 Money: "+(200-Template.instance().state.moneyFirst).toString();
-    if(Meteor.userId===this.players[0]) return "My Money: "+(200-Template.instance().state.moneyFirst);
-	return "My Money: "+Template.instance().state.moneyFirst;
+    if(Meteor.userId===this.players[0]) return "Enemy Money: "+(200-Template.instance().state.moneyFirst);
+	return "Enemy Money: "+Template.instance().state.moneyFirst;
   },
   myBet: function()
   {
-	if(!this.players.includes(Meteor.userId)||Meteor.userId===this.players[0])
+	if(!this.players.includes(Meteor.userId))
 	{
-		if(this.bidFirst>=0) return '<i class="check icon"></i>';
-		return '<i class="times icon"></i>';
+		if(this.bidFirst>=0) return 'Player 1 Bet: <i class="check icon"></i>';
+		return 'Player 1 Bet: <i class="times icon"></i>';
 	}
-	if(this.bidSecond>=0) return '<i class="check icon"></i>';
-	return '<i class="times icon"></i>';
+    if(Meteor.userId===this.players[0])
+    {
+        if(this.bidFirst>=0) return 'My Bet: <i class="check icon"></i>';
+		return 'My Bet: <i class="times icon"></i>';
+    }
+	if(this.bidSecond>=0) return 'My Bet: <i class="check icon"></i>';
+	return 'My Bet: <i class="times icon"></i>';
   },
   enemyBet: function()
   {
-	if(!this.players.includes(Meteor.userId)||Meteor.userId===this.players[0])
+	if(!this.players.includes(Meteor.userId))
     {
-		if(this.bidSecond>=0) return '<i class="check icon"></i>';
-		return '<i class="times icon"></i>';
+		if(this.bidSecond>=0) return 'Player 2 Bet: <i class="check icon"></i>';
+		return 'Player 2 Bet: <i class="times icon"></i>';
 	}
-	if(this.bidFirst>=0) return '<i class="check icon"></i>';
-	return '<i class="times icon"></i>';
+    if(Meteor.userId===this.players[0])
+    {
+        if(this.bidSecond>=0) return 'Enemy Bet: <i class="check icon"></i>';
+		return 'Enemy Bet: <i class="times icon"></i>';
+    }
+	if(this.bidFirst>=0) return 'Enemy Bet: <i class="check icon"></i>';
+	return 'Enemy Bet: <i class="times icon"></i>';
   },
   tieBreak: function()
   {
@@ -186,7 +197,8 @@ Template.create.events({
             bidFirst: -1,
             bidSecond: -1,
             toMove: -1,
-			lastBidFirst: 0
+			lastBidFirst: 0,
+            lastBidSecond: 0
         };
 
         Rooms.insert(obj);
@@ -202,7 +214,12 @@ Template.rooms.onCreated(function(){
 Template.rooms.helpers({
     rooms: function(){ return Rooms.find(); },
     you: function(){ return this.players.includes(Meteor.userId); },
-    picSelected: function(){ return (Template.instance().selectedRoom.get()!=="");}
+    picSelected: function(){ return (Template.instance().selectedRoom.get()!=="");},
+    locked: function()
+    { 
+        if(this.password.length>0) return '<i class="lock icon"></i>'; 
+        return '<i class="open lock icon"></i>';
+    }
 });
 
 Template.rooms.events({
@@ -220,12 +237,17 @@ Template.rooms.events({
     {
         var id = template.selectedRoom.get();
         var r = Rooms.findOne(id);
-        if(id!==undefined&&id!==null&&r!=undefined&&(r.players.length<2 || r.players.includes(Meteor.userId)) )
+        if(id!==undefined&&id!==null&&r!=undefined )
         {
-            if(r.password===prompt("Please enter the room password","")) 
+            if(r.players.includes(Meteor.userId)) 
             {
-                if(r.players.includes(Meteor.userId)==false)
-                Rooms.update(id,{"$push":{"players":Meteor.userId}});
+                FlowRouter.go('game.page',{_id: id});
+                return;
+            }
+            
+            if(r.password===""||r.password===prompt("Please enter the room password","")) 
+            {
+                if(r.players<2) Rooms.update(id,{"$push":{"players":Meteor.userId}});
                 FlowRouter.go('game.page',{_id: id});
             }
             else alert("Wrong password!");
