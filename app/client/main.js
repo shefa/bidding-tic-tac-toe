@@ -123,25 +123,40 @@ Template.game.helpers({
   },
   myMoney: function()
   {
-    return Template.instance().state.moneyFirst;
+	if(!this.players.includes(Meteor.userId)) return "Player 1 Money: "+(Template.instance().state.moneyFirst).toString();
+	if(Meteor.userId===this.players[0]) return "My Money: "+Template.instance().state.moneyFirst;
+	return "My Money: "+(200-Template.instance().state.moneyFirst);
   },
   enemyMoney: function()
   {
-    return 200-Template.instance().state.moneyFirst;
+	if(!this.players.includes(Meteor.userId)) return "Player 2 Money: "+(200-Template.instance().state.moneyFirst).toString();
+    if(Meteor.userId===this.players[0]) return "My Money: "+(200-Template.instance().state.moneyFirst);
+	return "My Money: "+Template.instance().state.moneyFirst;
   },
   myBet: function()
   {
-    if(this.bidFirst>=0) return '<i class="check icon"></i>';
-    else return '<i class="times icon"></i>';
+	if(!this.players.includes(Meteor.userId)||Meteor.userId===this.players[0])
+	{
+		if(this.bidFirst>=0) return '<i class="check icon"></i>';
+		return '<i class="times icon"></i>';
+	}
+	if(this.bidSecond>=0) return '<i class="check icon"></i>';
+	return '<i class="times icon"></i>';
   },
   enemyBet: function()
   {
-    if(this.bidSecond>=0) return '<i class="check icon"></i>';
-    else return '<i class="times icon"></i>';
+	if(!this.players.includes(Meteor.userId)||Meteor.userId===this.players[0])
+    {
+		if(this.bidSecond>=0) return '<i class="check icon"></i>';
+		return '<i class="times icon"></i>';
+	}
+	if(this.bidFirst>=0) return '<i class="check icon"></i>';
+	return '<i class="times icon"></i>';
   },
   tieBreak: function()
   {
-    if(Meteor.userId == this.players[Template.instance().state.tie]) return "You";
+	if(!this.players.includes(Meteor.userId)) return "Player "+(Template.instance().state.tie+1).toString();
+    if(Meteor.userId == this.players[Template.instance().state.tie]) return "Me ";
 	return "Enemy";
   }
 });
