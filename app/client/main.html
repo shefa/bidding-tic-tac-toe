@@ -1,25 +1,102 @@
 <head>
-  <title>app</title>
+  <title>Betting tic-tac-toe</title>
 </head>
 
-<body>
-  <h1>Welcome to Meteor!</h1>
+<template name="App_body">
+    <div class="ui inverted vertical masthead center aligned segment">
+        {{>menu}}
+        {{> Template.dynamic template=main}} 
+    </div>
+    {{>footer}}
+</template>
 
-  {{> hello}}
-  {{> info}}
-</body>
 
 <template name="hello">
   <button>Click Me</button>
   <p>You've pressed the button {{counter}} times.</p>
 </template>
 
-<template name="info">
-  <h2>Learn Meteor!</h2>
-  <ul>
-    <li><a href="https://www.meteor.com/try" target="_blank">Do the Tutorial</a></li>
-    <li><a href="http://guide.meteor.com" target="_blank">Follow the Guide</a></li>
-    <li><a href="https://docs.meteor.com" target="_blank">Read the Docs</a></li>
-    <li><a href="https://forums.meteor.com" target="_blank">Discussions</a></li>
-  </ul>
+
+<template name="menu">
+        <div class="ui container">
+            <div class="ui large secondary inverted pointing menu">
+                <a class="toc item"><i class="sidebar icon"></i></a>
+                <a href="/" class="item">Home</a>
+                <a href="/rooms" class="item">Rooms</a>
+                <div class="right item">
+                <a href="/create"  class="ui inverted button">Create room</a>
+                </div>
+            </div>
+        </div>
+</template>
+
+<template name="footer">
+    <div class="ui inverted vertical footer segment">
+        <div class="ui container">
+            <p>Multiplayer betting tic-tac-toe game</p>
+            <p>Developed by Georgi Marinov</p>
+            <p>May, 2018</p>
+        </div>
+    </div>
+</template>
+
+<template name="App_notFound">
+    <div class="ui text container">
+        <h1 class="ui inverted dividing header">404 Not Found</h1>
+    </div>
+</template>
+
+<template name="home_page">
+    <div class="ui text container">
+        <h1 class="ui inverted dividing header">Betting tic-tac-toe</h1>
+        <h2>Great game</h2>
+        <a href="/rooms" class="ui huge primary button">Browse rooms <i class="right arrow icon"></i></a>
+    </div>
+</template>
+
+<template name="create">
+  <div class="ui text container stuff left aligned">
+    <form class="ui form inverted">
+      <div class="field">
+        <label>Name</label>
+        <input type="text" name="name" placeholder="Name" required>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="text" name="password" placeholder="Password (blank for none)">
+      </div>
+      <div class="ui success message">
+        <div class="header">Success</div>
+        <p>Successfully created a room!</p>
+      </div>
+      <button class="ui button inverted" type="submit" style="margin-top: 1em;">Create room</button>
+    </form>
+  </div>
+</template>
+
+<template name="rooms">
+  <div class="ui text container left aligned stuff">
+  {{#if rooms.count}}
+    <div class="ui relaxed grid container">
+      <div class="ten wide column"><h2 class="ui dividing header inverted ">Name</h2></div>
+      <div class="six wide column"><h2 class="ui dividing header inverted">Players</h2></div>
+      {{#each rooms}}
+        <div class="ui inverted row left aligned item button" style="padding: 1em 3em !important;" id="{{_id}}">
+          <div class="ten wide column">
+            <div class="content">
+              <a class="header">{{name}}</a>
+            </div>
+          </div>
+          <div class="six wide column">
+            <div class="content">
+              <a class="header">{{players}} players</a>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  {{else}}
+  <h2 class="ui header inverted">No rooms created yet!</h2>
+  {{/if}}
+  </div>  
 </template>

@@ -20,3 +20,35 @@ Template.hello.events({
     instance.counter.set(instance.counter.get() + 1);
   },
 });
+
+Template.create.events({
+    'submit form' : function (event, instance){
+        event.preventDefault();
+        var obj = {
+            name: event.target["name"].value,
+            password: event.target["password"].value,
+            players: 0,
+            state: 52428800
+        };
+
+        Rooms.insert(obj);
+        $('.form').addClass("success");
+        $('.form')[0].reset();
+    }
+});
+
+Template.rooms.onCreated(function(){
+    this.selectedRoom = new ReactiveVar("");
+});
+
+Template.rooms.helpers({
+    rooms: function(){ return Rooms.find(); },
+    
+});
+
+Template.rooms.events({
+    'click .row': function(e, template)
+    {
+        console.log(e);
+    }
+});
