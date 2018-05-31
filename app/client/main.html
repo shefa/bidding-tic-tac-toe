@@ -29,26 +29,27 @@
     <div class="eight wide column">
       <h2 class="ui inverted header right aligned"> Tie Break: {{tieBreak}} </h2>
     </div>
-  </div>
-  {{#if waiting}}
-    {{#if mymove}}
-    <div class="ui inverted success message">
-        <p>Make a move!</p>
-    </div>
-    {{else}}
-    <div class="ui inverted message">
-         <p>Waiting for player to make move...</p>
-    </div>
-    {{/if}}
-  {{/if}}
-    <div class="ui relaxed grid container">
       <div class="eight wide column">
         <h2 class="ui inverted header left aligned"> {{myMoney}} </h2>
       </div>
       <div class="eight wide column">
         <h2 class="ui inverted header right aligned"> {{enemyMoney}} </h2>
       </div>
+  </div>
+  {{#if waiting}}
+    {{#if mymove}}
+    <div class="ui inverted success message">
+        <p>{{betResult}}</p>
+		<p>Now, Make a move!</p>
     </div>
+    {{else}}
+    <div class="ui inverted message">
+		 <p>{{betResult}}</p>
+         <p>Waiting for player to make move...</p>
+    </div>
+    {{/if}}
+  {{/if}}
+    
     <table class="ui inverted celled table">
       <tbody>
         <tr><td id="0">{{{doTable 0}}}</td><td id="1">{{{doTable 1}}}</td><td id="2">{{{doTable 2}}}</td></tr>

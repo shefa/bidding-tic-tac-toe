@@ -83,6 +83,8 @@ Template.game.helpers({
 
       Template.instance().state.moneyFirst+=this.bidSecond-this.bidFirst;
 
+	  this.lastBidFirst=this.bidFirst;
+	  
       this.bidFirst=-1;
       this.bidSecond=-1;
 
@@ -114,6 +116,17 @@ Template.game.helpers({
     
     if(me===this.toMove) return true;
     return false;
+  },
+  betResult: function()
+  {
+	  if(!this.players.includes(Meteor.userId)) return "Bet result: "+this.lastBidFirst+"-"+this.lastBidSecond+" (Player1-Player2).";
+	  if(Meteor.userId===this.players[0])
+	  {
+		  if(this.toMove===0) return "You won the bet: "+this.lastBidFirst+"-"+this.lastBidSecond+" (you-enemy)!";
+		  return "You lost the bet: "+this.lastBidFirst+"-"+this.lastBidSecond+" (you-enemy)!";
+	  }
+	  if(this.toMove===1) return "You won the bet: "+this.lastBidSecond+"-"+this.lastBidFirst+" (you-enemy)!";
+	  return "You lost the bet: "+this.lastBidSecond+"-"+this.lastBidFirst+" (you-enemy)!";
   },
   whoami: function()
   {
@@ -172,7 +185,8 @@ Template.create.events({
             state: 52428800,
             bidFirst: -1,
             bidSecond: -1,
-            toMove: -1
+            toMove: -1,
+			lastBidFirst: 0
         };
 
         Rooms.insert(obj);
