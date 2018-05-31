@@ -1,5 +1,4 @@
 Rooms = new Mongo.Collection("rooms");
-Meteor.userId = Math.random();
 
 Meteor.decodeState = function (room)
 {

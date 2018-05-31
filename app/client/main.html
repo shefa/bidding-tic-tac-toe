@@ -22,7 +22,14 @@
   {{setup}}
   <div class="ui text container stuff">
   <h2 class="ui inverted header">You are {{whoami}}</h2>
-  <h2 class="ui inverted header">Players: {{players.length}}</h2>
+  <div class="ui relaxed grid container">
+    <div class="eight wide column">
+      <h2 class="ui inverted header left aligned"> Players: {{players.length}} </h2>
+    </div>
+    <div class="eight wide column">
+      <h2 class="ui inverted header right aligned"> Tie Break: {{tieBreak}} </h2>
+    </div>
+  </div>
   {{#if waiting}}
     {{#if mymove}}
     <div class="ui inverted success message">

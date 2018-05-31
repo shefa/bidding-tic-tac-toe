@@ -3,6 +3,9 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 import './main.html';
 
+Meteor.userId=0;
+Meteor.call("getId",function(err,res){Meteor.userId=res;});
+
 
 Template.game.events({
   'click #betBtn': function(e, template)
@@ -14,8 +17,12 @@ Template.game.events({
         alert("You cannot play in this game!");
         return;
       } 
-
-      var bet = parseInt(prompt("Bid amount(0-"+template.state.moneyFirst+")",""));
+	  
+	  var maxm = 0;
+      if(Meteor.userId===room.players[0]) maxm=template.state.moneyFirst;
+      else maxm= 200-template.state.moneyFirst
+	  
+      var bet = parseInt(prompt("Bid amount(0-"+maxm+")",""));
 
       if(bet>=0&&bet<=template.state.moneyFirst)
       {
@@ -68,10 +75,8 @@ Template.game.helpers({
       if(this.bidFirst==this.bidSecond)
       {
         first = Template.instance().state.tie;
-        console.log("switching tie");
         if(Template.instance().state.tie===1) Template.instance().state.tie=0;
         else Template.instance().state.tie=1;
-        console.log(Template.instance().state.tie);
       }
       else if (this.bidFirst>this.bidSecond) first=0;
       else first=1;
@@ -82,9 +87,7 @@ Template.game.helpers({
       this.bidSecond=-1;
 
       this.toMove=first;
-      console.log(Template.instance().state.tie);
       this.state = Meteor.encodeState(Template.instance().state);
-      console.log(this.state);
       Rooms.update(FlowRouter.getParam("_id"),this);
     }
   },
@@ -138,27 +141,11 @@ Template.game.helpers({
   },
   tieBreak: function()
   {
-    return Meteor.userId == Rooms.findOne(FlowRouter.getParam("_id")).players[Template.instance().state.tie];
+    if(Meteor.userId == this.players[Template.instance().state.tie]) return "You";
+	return "Enemy";
   }
 });
 
-Template.hello.onCreated(function helloOnCreated() {
-  // counter starts at 0
-  this.counter = new ReactiveVar(0);
-});
-
-Template.hello.helpers({
-  counter() {
-    return Template.instance().counter.get();
-  },
-});
-
-Template.hello.events({
-  'click button'(event, instance) {
-    // increment the counter when button is clicked
-    instance.counter.set(instance.counter.get() + 1);
-  },
-});
 
 Template.create.events({
     'submit form' : function (event, instance){
