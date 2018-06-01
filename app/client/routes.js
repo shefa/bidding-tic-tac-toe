@@ -29,6 +29,13 @@ FlowRouter.route('/rooms', {
     },
 });
 
+FlowRouter.route('/rules', {
+    name: 'rules.page',
+    action(){
+        BlazeLayout.render('App_body', {main: 'rules'});
+    },
+});
+
 FlowRouter.route('/game/:_id', {
     name: 'game.page',
     action(){

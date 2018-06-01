@@ -36,4 +36,6 @@ td {
 .row {
     margin-top: 0.8em !important;
 }
-
+.rules{
+    padding: 2em !important;
+}

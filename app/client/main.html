@@ -11,12 +11,6 @@
 </template>
 
 
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
-</template>
-
-
 <template name="game">
   {{#with game}}
   {{setup}}
@@ -77,6 +71,7 @@
                 <a class="toc item"><i class="sidebar icon"></i></a>
                 <a href="/" class="item">Home</a>
                 <a href="/rooms" class="item">Rooms</a>
+                <a href="/rules" class="item">Rules</a>
                 <div class="right item">
                 <a href="/create"  class="ui inverted button">Create room</a>
                 </div>
@@ -103,7 +98,7 @@
 <template name="home_page">
     <div class="ui text container">
         <h1 class="ui inverted dividing header">Betting tic-tac-toe</h1>
-        <h2>Great game</h2>
+        <h2>Intriguing twist to a well-known game</h2>
         <a href="/rooms" class="ui huge primary button">Browse rooms <i class="right arrow icon"></i></a>
     </div>
 </template>
@@ -162,4 +157,40 @@
   <h2 class="ui header inverted">No rooms created yet!</h2>
   {{/if}}
   </div>  
+</template>
+
+<template name="rules">
+    <div class="ui text container left aligned stuff">
+        <div class="ui inverted segment">
+          <div class="ui inverted relaxed divided list">
+            <div class="item stuff">
+            <i class="building icon rules"></i>
+              <div class="content">
+                <h2 class="header">Rooms and general usage</h2>
+                Rooms can be created and deleted by anyone, with or without a password!<br>
+                All users can join rooms, but only 2 users can play in the same room.<br>
+                Users are distinguished by IP.
+              </div>
+            </div>
+            <div class="item stuff">
+            <i class="chess board icon rules"></i>
+              <div class="content">
+                <h2 class="header">Betting tic-tac-toe general</h2>
+                Players start with 100 coins each and every turn they make bets, unaware of the enemy's bet.<br>
+                When both players have finished the bet, the higher bet wins.<br>
+                The winner can then make a move on the ordinary tic-tac-toe board.<br>
+                Regardless of the winner, each player gives the amount he bid to the other player.
+              </div>
+            </div>
+            <div class="item stuff">
+            <i class="cut icon rules"></i>
+              <div class="content">
+                <h2 class="header">Tie & Tie Break</h2>
+                In case of a tie when bidding, winner is the player who has the tie break.<br>
+                The tie break for the player is then transfered to the other player.
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
 </template>
